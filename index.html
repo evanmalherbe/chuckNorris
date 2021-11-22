@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuck Norris Quotes</title>
+</head>
+
+<body>
+    <div id="jokesDiv">
+        <h1> Here are 3 randomly selected Chuck Norris jokes </h1>
+    </div>
+
+    <script>
+        /* I looked at this website to be sure I understood how to fetch the jokes (and then realised I didn't need to use
+     "require('isomorphic-fetch');" to do it.): http://www.icndb.com/api/ */
+
+        // Declare array for jokes
+        let jokes = [];
+
+        // Select parent div element
+        let selectDiv = document.getElementById("jokesDiv");
+
+        /* Create async function to get jokes and display them to page (allows me to use the "await" keyword to
+        ensure that each request for data can be allowed to return a result before the next request happens. This
+        means that everything works in the correct sequence, instead of creating problems when a particular
+        equest takes longer than anticipated.) */
+
+        // Also use arrow function to type less code
+        let getJokes = async () => {
+            // Fetch 3 jokes from Chuck Norris jokes api
+            let data = await fetch("http://api.icndb.com/jokes/random/3");
+            // Takes the result of the fetch command and parse the JSON info into an object
+            let jokeInfo = await data.json();
+
+            // Run a for loop to print each of the 3 jokes to the screen, each in their own paragraph.
+            for (let i = 0; i <= 2; i++) {
+                jokes[i] = "Joke " + (i + 1) + " : " + jokeInfo.value[i].joke;
+                let createPara = document.createElement("p");
+                // Add joke to paragraph
+                createPara.innerHTML = jokes[i];
+                // Append/add paragraph to parent div
+                selectDiv.appendChild(createPara);
+            }
+
+            // async function ends
+        }
+
+        // Call function to fetch and display jokes
+        getJokes();
+    </script>
+
+</body>
+
+</html>
